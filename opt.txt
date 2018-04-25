@@ -1,0 +1,82 @@
+ library ('nloptr')
+ 
+ #f(x)=0.0012*x[1]^2+1.4423*x[1]+15.86+0.0114*x[2]^2+0.607*x[2]+16.098+0.044*x[3]^2+0.7037*x[3]+3.0391+0.0162*x[4]^2+1.7106*x[4]+6.0502+0.0021*x[5]^2+2.2095*x[5]+5.3922+0.0419*x[6]^2+1.7013*x[6]+8.3339+0.0417*x[7]^2+1.6813*x[7]+8.2559
+ 
+ eval_f <- function(x){
+ return( list( "objective"=0.0012*x[1]^2+1.4423*x[1]+15.86+0.0114*x[2]^2+0.607*x[2]+16.098+0.044*x[3]^2+0.7037*x[3]+3.0391+0.0162*x[4]^2+1.7106*x[4]+6.0502+0.0021*x[5]^2+2.2095*x[5]+5.3922+0.0419*x[6]^2+1.7013*x[6]+8.3339+0.0417*x[7]^2+1.6813*x[7]+8.2559,
+ "gradient" = c(2*0.0012*x[1]+1.4423,
+   2*0.0114*x[2]+0.607 ,
+   2*0.044*x[3]+0.7037 ,
+   2*0.0162*x[4]+1.7106 ,
+   2*0.0021*x[5]+2.2095 ,
+   2*0.0419*x[6]+1.7013 ,
+   2*0.0417*x[7]+1.6813 )))
+    }
+ 
+ 
+ # constraint functions
+ # inequalities
+ eval_g_ineq <- function( x ) {
+ constr <- c( 50 - x[1] - x[2] - x[3] - x[4] -x[5] - x[6] - x [7] )
+ grad <-  c( -1,
+ -1,
+ -1,
+ -1 ,
+ -1,
+ -1,
+ -1)
+return( list( "constraints"=constr, "jacobian"=grad ) )
+ }
+# equalities
+eval_g_eq <- function( x ) {
+constr <- c( x[1]+x[2]+x[3]+x[4]+x[5]+x[6]+x[7]-1350)
+ 
+grad <- c( 1 ,
+      1 ,
+      1 ,
+      1 ,
+      1 ,
+      1 ,
+      1 )
+return( list( "constraints"=constr, "jacobian"=grad ) )
+ }
+# initial values
+ x0 <- c( 210, 210, 210, 70, 70, 50, 50 )
+ 
+# lower and upper bounds of control
+ lb <- c( 210, 210, 210, 70, 70, 50, 50 )
+ ub <- c( 420, 420, 420, 140, 140, 120, 120 )
+ 
+local_opts <- list( "algorithm" = "NLOPT_LD_MMA",
+"xtol_rel" = 1.0e-7 )
+opts <- list( "algorithm" = "NLOPT_LD_AUGLAG",
+"xtol_rel" =1.0e-7 ,
+"maxeval" =1570,
+"local_opts" = local_opts )
+ 
+res <- nloptr( x0=x0,
+eval_f=eval_f,lb=lb,
+ub=ub,
+eval_g_ineq=eval_g_ineq,
+eval_g_eq=eval_g_eq,
+opts=opts)
+print( res )
+ 
+
+Call:
+
+nloptr(x0 = x0, eval_f = eval_f, lb = lb, ub = ub, eval_g_ineq = eval_g_ineq, 
+    eval_g_eq = eval_g_eq, opts = opts)
+
+
+Minimization using NLopt version 2.4.2 
+
+NLopt solver status: 4 ( NLOPT_XTOL_REACHED: Optimization stopped because 
+xtol_rel or xtol_abs (above) was reached. )
+
+Number of Iterations....: 452 
+Termination conditions:  xtol_rel: 1e-07        maxeval: 1570 
+Number of inequality constraints:  1 
+Number of equality constraints:    1 
+Optimal value of objective function:  5730.58971755221 
+Optimal value of controls: 420 301.4898 210 140 140 68.96978 69.54038
