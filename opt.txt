@@ -1,32 +1,40 @@
- library ('nloptr')
+library ('nloptr')
+vectA <- c(0.0012, 0.0114, 0.044, 0.0162, 0.0021, 0.0419, 0.0417)
+vectB <- c(1.4423,0.607,0.7037,1.7106,1.7013,2.2095,1.7013) 
+vectC <- c(15.86, 16.098, 3.0391, 6.0502, 5.3922, 8.3339, 8.2559)
+	eval_f <- 2
+val=rle(vectA)$values
+n=0 
+for( i in 1:length(val)){ 
  
- #f(x)=0.0012*x[1]^2+1.4423*x[1]+15.86+0.0114*x[2]^2+0.607*x[2]+16.098+0.044*x[3]^2+0.7037*x[3]+3.0391+0.0162*x[4]^2+1.7106*x[4]+6.0502+0.0021*x[5]^2+2.2095*x[5]+5.3922+0.0419*x[6]^2+1.7013*x[6]+8.3339+0.0417*x[7]^2+1.6813*x[7]+8.2559
- 
- eval_f <- function(x){
- return( list( "objective"=0.0012*x[1]^2+1.4423*x[1]+15.86+0.0114*x[2]^2+0.607*x[2]+16.098+0.044*x[3]^2+0.7037*x[3]+3.0391+0.0162*x[4]^2+1.7106*x[4]+6.0502+0.0021*x[5]^2+2.2095*x[5]+5.3922+0.0419*x[6]^2+1.7013*x[6]+8.3339+0.0417*x[7]^2+1.6813*x[7]+8.2559,
- "gradient" = c(2*0.0012*x[1]+1.4423,
-   2*0.0114*x[2]+0.607 ,
-   2*0.044*x[3]+0.7037 ,
-   2*0.0162*x[4]+1.7106 ,
-   2*0.0021*x[5]+2.2095 ,
-   2*0.0419*x[6]+1.7013 ,
-   2*0.0417*x[7]+1.6813 )))
-    }
- 
- 
- # constraint functions
- # inequalities
- eval_g_ineq <- function( x ) {
- constr <- c( 50 - x[1] - x[2] - x[3] - x[4] -x[5] - x[6] - x [7] )
- grad <-  c( -1,
+	eval_f <- function(x){
+		return( list( "objective"=vectA[i]*x[i]*x[i]+vectB[i]*x[i]+vectC[i]+eval_f,
+				"gradient" = c(2*vectA[i]*x[i]+vectB[i],
+						   )))
+				   }
+				}
+
+
+
+# constraint functions
+# inequalities
+eval_g_ineq <- function( x ) {
+
+for( i in 1:length(val)){
+ constr <- c(- x[i] )
+				}
+constr <- (50 - constr)
+ return( list( "constraints"=constr, "jacobian"=grad ) )
+ }
+
+grad <-  c( -1,
  -1,
  -1,
  -1 ,
  -1,
  -1,
  -1)
-return( list( "constraints"=constr, "jacobian"=grad ) )
- }
+
 # equalities
 eval_g_eq <- function( x ) {
 constr <- c( x[1]+x[2]+x[3]+x[4]+x[5]+x[6]+x[7]-1350)
@@ -61,4 +69,3 @@ eval_g_ineq=eval_g_ineq,
 eval_g_eq=eval_g_eq,
 opts=opts)
 print( res )
- 
