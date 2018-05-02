@@ -4,7 +4,7 @@ vectB <- c(1.4423,0.607,0.7037,1.7106,1.7013,2.2095,1.7013)
 vectC <- c(15.86, 16.098, 3.0391, 6.0502, 5.3922, 8.3339, 8.2559)
 	eval_f <- 2
 val=rle(vectA)$values
-n=0 
+i=0 
 for( i in 1:length(val)){ 
  
 	eval_f <- function(x){
@@ -18,15 +18,14 @@ for( i in 1:length(val)){
 
 # constraint functions
 # inequalities
+constr <- 2
 eval_g_ineq <- function( x ) {
-
+val=rle(vectA)$values
+i=0
 for( i in 1:length(val)){
  constr <- c(- x[i] )
 				}
-constr <- (50 - constr)
- return( list( "constraints"=constr, "jacobian"=grad ) )
- }
-
+constr <- (50 + constr)
 grad <-  c( -1,
  -1,
  -1,
@@ -35,9 +34,19 @@ grad <-  c( -1,
  -1,
  -1)
 
+ return( list( "constraints"=constr, "jacobian"=grad ) )
+ }
+
 # equalities
-eval_g_eq <- function( x ) {
-constr <- c( x[1]+x[2]+x[3]+x[4]+x[5]+x[6]+x[7]-1350)
+
+eval_g_eq <- function( x ){
+val=rle(vectA)$values
+i=0
+for( i in 1:length(val)){
+ constr <- c( x[i] +constr  )
+}
+constr <- ( constr - 1350)
+
  
 grad <- c( 1 ,
       1 ,
