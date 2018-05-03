@@ -2,59 +2,68 @@ library ('nloptr')
 vectA <- c(0.0012, 0.0114, 0.044, 0.0162, 0.0021, 0.0419, 0.0417)
 vectB <- c(1.4423,0.607,0.7037,1.7106,1.7013,2.2095,1.7013) 
 vectC <- c(15.86, 16.098, 3.0391, 6.0502, 5.3922, 8.3339, 8.2559)
-	eval_f <- 2
-val=rle(vectA)$values
-i=0 
-for( i in 1:length(val)){ 
+	
  
-	eval_f <- function(x){
-		return( list( "objective"=vectA[i]*x[i]*x[i]+vectB[i]*x[i]+vectC[i]+eval_f,
-				"gradient" = c(2*vectA[i]*x[i]+vectB[i],
-						   )))
-				   }
-				}
+eval_f <- function(x){
+	eval_f <- 0
+      for( i in 1:length(vectA)){ 
+		eval_f < -vectA[i]*x[i]*x[i]+vectB[i]*x[i]+vectC[i]+eval_f
+                                 }
+       
+
+
+	return( list( "objective"=eval_f,
+			  "gradient" =     c(2*0.0012*x[1]+1.4423,
+			   			   2*0.0114*x[2]+0.607 ,
+			  			   2*0.044*x[3]+0.7037 ,
+   						   2*0.0162*x[4]+1.7106 ,
+   						   2*0.0021*x[5]+2.2095 ,
+   						   2*0.0419*x[6]+1.7013 ,
+   						   2*0.0417*x[7]+1.6813 )))
+    }
+						
 
 
 
 # constraint functions
 # inequalities
-constr <- 2
+
 eval_g_ineq <- function( x ) {
-val=rle(vectA)$values
-i=0
-for( i in 1:length(val)){
- constr <- c(- x[i] )
-				}
-constr <- (50 + constr)
-grad <-  c( -1,
- -1,
- -1,
- -1 ,
- -1,
- -1,
- -1)
+	constr <- 0
+	for( i in 1:length(vectA)){
+		constr <- c(- x[i]+constr )
+               			   }
+
+	constr <- (50 + constr)
+	grad <-  c( -1,
+			-1,
+			-1,
+			-1 ,
+			-1,
+			-1,
+			-1)
 
  return( list( "constraints"=constr, "jacobian"=grad ) )
- }
+					}
 
 # equalities
 
 eval_g_eq <- function( x ){
-val=rle(vectA)$values
-i=0
-for( i in 1:length(val)){
- constr <- c( x[i] +constr  )
-}
-constr <- ( constr - 1350)
+	constr <-0
+		for( i in 1:length(vectA)){
+ 			constr <- c( x[i] +constr )
+					        }
+
+	constr <- ( constr - 1350)
 
  
-grad <- c( 1 ,
-      1 ,
-      1 ,
-      1 ,
-      1 ,
-      1 ,
-      1 )
+	grad <- c( 1 ,
+	  	     1 ,
+ 	  	     1 ,
+  	     	     1 ,
+  	  	     1 ,
+	 	     1 ,
+   	  	     1 )
 return( list( "constraints"=constr, "jacobian"=grad ) )
  }
 # initial values
