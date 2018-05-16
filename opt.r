@@ -1,10 +1,16 @@
 library ('nloptr')
-vectA <- c(0.0012, 0.0114, 0.044, 0.0162, 0.0021, 0.0419, 0.0417)
-vectB <- c(1.4423,0.607,0.7037,1.7106,1.7013,2.2095,1.7013)
-vectC <- c(15.86, 16.098, 3.0391, 6.0502, 5.3922, 8.3339, 8.2559)
-Marche <- c(0, 1, 1, 1, 1, 0, 1)
-demande<- 1500
+library('readxl')
+vectA <- my_data[1,]
+vectB <- my_data[2,]
+vectC <- my_data[3,]
+Marche <- scan(nmax=length(vectA))
+demande<- scan(nmax=1)
 
+if(demande > sum(ub)){
+  print("La demande est supérieur a la capacité de production on deficitaire de: " )
+  print(demande-sum(ub))
+  }
+  
 eval_f <- function(x){
   objf <- 0.0
   for (i in 1: length(vectA))
@@ -35,12 +41,12 @@ for (i in 2: length(vectA))
   return( list( "constraints"=constr, "jacobian"=grad ) )
 }
 # initial values
-x0 <- c( 210, 210, 210, 70, 70, 50, 50 )*Marche
+x0 <- my_data[4,]*Marche
 
 # lower and upper bounds of control
 
-lb <- c( 210, 210, 210, 70, 70, 50, 50 )*Marche
-ub <- c( 420, 420, 420, 140, 140, 120, 120 )*Marche
+lb <- my_data[4,]*Marche
+ub <- my_data[5,]*Marche
 
 
 local_opts <- list( "algorithm" = "NLOPT_LD_MMA",
