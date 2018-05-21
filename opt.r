@@ -1,16 +1,10 @@
 library ('nloptr')
-library('readxl')
-vectA <- my_data[1,]
-vectB <- my_data[2,]
-vectC <- my_data[3,]
-Marche <- scan(nmax=length(vectA))
-demande<- scan(nmax=1)
+vectA <- c(0.0012, 0.0114, 0.044, 0.0162, 0.0021, 0.0419, 0.0417)
+vectB <- c(1.4423,0.607,0.7037,1.7106,1.7013,2.2095,1.7013)
+vectC <- c(15.86, 16.098, 3.0391, 6.0502, 5.3922, 8.3339, 8.2559)
 
-if(demande > sum(ub)){
-  print("La demande est supérieur a la capacité de production on deficitaire de: " )
-  print(demande-sum(ub))
-  }
-  
+
+
 eval_f <- function(x){
   objf <- 0.0
   for (i in 1: length(vectA))
@@ -18,35 +12,35 @@ eval_f <- function(x){
   
   vector <- c(2*vectA[1]*x[1]+vectB[1])
   for (i in 2: length(vectA))
-    {vector<-c(vector,2*vectA[i]*x[i]+vectB[i])}
+  {vector<-c(vector,2*vectA[i]*x[i]+vectB[i])}
   
-
+  
   return( list( "objective"=objf,
-              "gradient" = vector))
+                "gradient" = vector))
 }
 eval_g_ineq <- function( x ) {
-constr <- c( 0 - sum(x) )
-grad <- c(1)
-for (i in 2: length(vectA))
-{grad<-c(grad,1)}
+  constr <- c( 0 - sum(x) )
+  grad <- c(1)
+  for (i in 2: length(vectA))
+  {grad<-c(grad,1)}
   return( list( "constraints"=constr, "jacobian"=grad ) )
 }
 # equalities
 eval_g_eq <- function( x ) {
   constr <- c( sum(x)-demande)
-grad <- c(1)
-for (i in 2: length(vectA))
-{grad<-c(grad,1)}
-
+  grad <- c(1)
+  for (i in 2: length(vectA))
+  {grad<-c(grad,1)}
+  
   return( list( "constraints"=constr, "jacobian"=grad ) )
 }
 # initial values
-x0 <- my_data[4,]*Marche
+x0 <- c( 210, 210, 210, 70, 70, 50, 50 )*Marche
 
 # lower and upper bounds of control
 
-lb <- my_data[4,]*Marche
-ub <- my_data[5,]*Marche
+lb <- c( 210, 210, 210, 70, 70, 50, 50 )*Marche
+ub <- c( 420, 420, 420, 140, 140, 120, 120 )*Marche
 
 
 local_opts <- list( "algorithm" = "NLOPT_LD_MMA",
