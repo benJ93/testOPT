@@ -10,64 +10,60 @@ if (interactive()) {
                          list(
                            `Midwest` = c(0, 1))
              ),
-             tableOutput("cc1"),
+
              
              selectInput("CC2", "groupe CC2:",
                          list(
                            `Midwest` = c(0, 1))
              ),
-             tableOutput("cc2"),
+
              
              selectInput("CC3", "groupe CC3:",
                          list(
                            `Midwest` = c(0, 1))
              ),
-             tableOutput("cc3"),
+
              
              selectInput("TV1", "groupe TV1:",
                          list(
                            `Midwest` = c(0, 1))
              ),
-             tableOutput("tv1"),
+
              
              selectInput("TV2", "groupe TV2:",
                          list(
                            `Midwest` = c(0, 1))
              ),
-             tableOutput("tv2"),
+
              
              selectInput("TG1", "groupe TG1:",
                          list(
                            `Midwest` = c(0, 1))
              ),
-             tableOutput("tg1"),
+
              
              selectInput("TG2", "groupe TG2:",
                          list(
                            `Midwest` = c(0, 1))
-             ),
-             tableOutput("tg2")
+             )
+
       ),
       column(3, 
              numericInput("num", h3("entrer la demande de puissance en MW: "), 
-                          value = 2000),
-             tableOutput("num")
+                          value = 1000)
 
-             ),
-      column(3,
-             h3("lancer le calcul"),
-             actionButton("runopt", "Action"),
-             br(),
-             br(),
-             verbatimTextOutput("res"),
              
-             # Output: HTML table with requested number of observations ----
-             tableOutput("view"))
+      ),
+      column(3,
+             titlePanel("la solution:"),
+             tableOutput("S")
+             
+
+    )
     ),
     
-    
     server = function(input, output, session) {
-      output$tg2 <- renderTable({
+      output$S <- renderTable({
         CC1 <- paste(input$CC1, collapse = ", ")
         
         CC2 <- paste(input$CC2, collapse = ", ")
@@ -89,13 +85,13 @@ if (interactive()) {
         RESU <-c(CC1, CC2, CC3, TV1, TV2, TG1, TG2)
         DD <- as.numeric(RESU)
         
-        
+
         
         library ('nloptr')
         vectA <- c(0.0012, 0.0114, 0.044, 0.0162, 0.0021, 0.0419, 0.0417)
         vectB <- c(1.4423,0.607,0.7037,1.7106,1.7013,2.2095,1.7013)
         vectC <- c(15.86, 16.098, 3.0391, 6.0502, 5.3922, 8.3339, 8.2559)
-
+        
         
         eval_f <- function(x){
           objf <- 0.0
@@ -149,8 +145,10 @@ if (interactive()) {
                        eval_g_eq=eval_g_eq,
                        opts=opts)
         print( res )
+
         total <- sum (res[["solution"]])
         print(total )
+        S <- (res[["solution"]])
       })
     }
   )
