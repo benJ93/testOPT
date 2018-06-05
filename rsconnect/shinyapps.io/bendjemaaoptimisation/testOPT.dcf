@@ -1,0 +1,13 @@
+name: testOPT
+title: testOPT
+username:
+account: bendjemaaoptimisation
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 352428
+bundleId: 1412139
+url: https://bendjemaaoptimisation.shinyapps.io/testOPT/
+when: 1528190659.41351
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: .RData|opt.r|README.md
